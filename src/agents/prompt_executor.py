@@ -1,6 +1,6 @@
 from src.agents.base import BaseAgent
 from src.core.config import PromptObject
-from typing import Optional
+from typing import Optional, Union, Union
 import os
 from dataclasses import dataclass
 
@@ -21,7 +21,7 @@ class PromptExecutor(BaseAgent):
         prompt_object: PromptObject,
         input_data: str,
         return_metadata: bool = False,
-    ) -> ExecutionResult:
+    ) -> Union[ExecutionResult, str]:
         import time
 
         start_time = time.time()
@@ -76,7 +76,7 @@ class PromptExecutor(BaseAgent):
 
         return raw_output
 
-    def _estimate_confidence(self, raw_output: str, parsed_output: dict) -> float:
+    def _estimate_confidence(self, raw_output: str, parsed_output) -> float:
         confidence_indicators = []
 
         if not raw_output or len(raw_output.strip()) < 10:
@@ -84,7 +84,9 @@ class PromptExecutor(BaseAgent):
         else:
             confidence_indicators.append(0.7)
 
-        if parsed_output and not parsed_output.get("error"):
+        if parsed_output and not (
+            isinstance(parsed_output, list) or parsed_output.get("error")
+        ):
             confidence_indicators.append(0.2)
 
         uncertainty_words = [
@@ -134,10 +136,12 @@ class PromptExecutor(BaseAgent):
 
         return max(0.0, min(1.0, base_confidence))
 
-    def _detect_uncertainty(self, parsed_output: dict) -> dict:
+    def _detect_uncertainty(self, parsed_output) -> dict:
         uncertainty_flags = {}
 
-        if not parsed_output or parsed_output.get("error"):
+        if not parsed_output or (
+            isinstance(parsed_output, dict) and parsed_output.get("error")
+        ):
             uncertainty_flags["parse_error"] = True
             return uncertainty_flags
 
