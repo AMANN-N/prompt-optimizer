@@ -1,0 +1,229 @@
+# Base Prompt: Context/Background for the task
+base_prompt: |
+  You are an expert Tender Analyst. Your job is to extract structured tender information from newspaper clippings and official notices.
+  The data will be used for a tender aggregation platform. You must be precise, handle different date formats, and extract monetary values as standard strings.
+  If a field is not present, return null.
+
+# User Intent: Describe what you want to extract clearly
+task_intent: |
+  Extract the following fields from the images:
+  {
+    "tenders": [
+      {
+        "procurement_type": null,
+        "amount": null,
+        "emd": null,
+        "document_fee": null,
+        "tender_fee": null,
+        "authority_name": null,
+        "authority_ownership": null,
+        "authority_state": null,
+        "location": null,
+        "district": null,
+        "state": null,
+        "description": null,
+        "tender_notice_no": null,
+        "posting_date": null,
+        "bid_deadline": null,
+        "auction_start_datetime": null,
+        "auction_end_datetime": null,
+        "contact_person_address": null,
+        "contact_person_email": null,
+        "website_url": null
+      }
+    ]
+  }
+
+# LLM Settings
+llm:
+  provider: "gemini"
+  model: "gemini-2.0-flash-lite"
+
+# Optimization Settings
+optimization:
+  max_iterations: 3
+  num_variants: 3
+  exploration_weight: 0.3
+  early_stopping:
+    patience: 5
+    min_improvement: 0.01
+
+# Phase 1: Evaluation Weights
+evaluation:
+  exact_match_weight: 0.30
+  semantic_weight: 0.30
+  partial_credit_weight: 0.25
+  confidence_weight: 0.15
+  min_confidence_threshold: 0.7
+
+# Phase 2: Anti-Overfitting
+anti_overfitting:
+  k_folds: 5
+  generalization_gap_limit: 0.15
+  overfitting_gini_threshold: 0.3
+  regularization_lambda: 0.1
+  diversity_min_cluster_score: 0.60
+  diversity_threshold: 0.50
+
+# Phase 3: Human-in-the-Loop
+human_review:
+  pause_on_overfitting_risk: true
+  pause_on_generalization_gap: true
+  pause_on_low_confidence: true
+  pause_on_edge_cases: true
+
+# Phase 4: Constraint Checking
+constraints:
+  enabled: true
+  critical_only: false
+
+# Dataset Configuration
+dataset:
+  # Base directory for images (absolute path recommended)
+  base_path: "/Users/amansingh/Downloads/NewspaperImages"
+  
+  # List of examples
+  examples:
+    - filename: "000a4aa5-be10-4d09-906b-6cffa68e6d9c.jpg"
+      ground_truth:
+        tenders:
+          - procurement_type: "Tender"
+            amount: "2496537"
+            emd: "50000"
+            document_fee: "5000"
+            tender_fee: null
+            authority_name: "Road Construction Department"
+            authority_ownership: "State"
+            authority_state: null
+            location: "Hazaribag"
+            district: "Hazaribag"
+            state: null
+            description: "Construction of PCC road and drain work up to Shyam Mohan Sharma's house from Dr. Agarwal Gali PHED Chahardiwari under Barhi block in the financial year 2025-26"
+            tender_notice_no: "10/2025-26"
+            posting_date: "11/11/2025"
+            bid_deadline: "12/11/2025"
+            auction_start_datetime: null
+            auction_end_datetime: null
+            contact_person_address: null
+            contact_person_email: "eercdhazari-jhr@nic.in"
+            website_url: "www.jharkhand.gov.in"
+
+    - filename: "00cccce4-e2ea-4fdc-b558-3b68a98cced0.jpg"
+      ground_truth:
+        tenders:
+          - procurement_type: "Tender"
+            amount: "2893000000"
+            emd: "1596500"
+            document_fee: "11800"
+            tender_fee: null
+            authority_name: "Rail Land Development Authority"
+            authority_ownership: "Central"
+            authority_state: null
+            location: "Railway Yard Jaipur at the end of Phulera, at km 241/8-9, LC number 225"
+            district: "Jaipur"
+            state: null
+            description: "Construction of a full-fledged ROB (Road Over Bridge) of 11.0 meter width (three lane) in Jaipur, which includes 1 x 46.0 meter span of the railway section and PSC girder of (5 x 25.0 meter + 1 x 18.0 meter) span, pile foundation, about 475 meter long R.E. wall and service/slip lane etc."
+            tender_notice_no: "RFP Notification No. RLDA/RFP/CPM/JP/ROB/2025/01"
+            posting_date: "24/10/2025"
+            bid_deadline: "02/12/2025"
+            auction_start_datetime: null
+            auction_end_datetime: null
+            contact_person_address: null
+            contact_person_email: "cpmridajp@gmail.com"
+            website_url: "www.rlda.indianrailways.gov.in"
+
+    - filename: "01df7c83-1251-44fb-b41e-2a45a0ddda75.jpg"
+      ground_truth:
+        tenders:
+          - procurement_type: "Tender"
+            amount: "80000"
+            emd: null
+            document_fee: null
+            tender_fee: null
+            authority_name: "Chandigarh Tourism"
+            authority_ownership: "Other"
+            authority_state: null
+            location: "Open Ground, opposite Museum & Art Gallery, Sector 10, Chandigarh"
+            district: null
+            state: null
+            description: "Open space is available for rental during the Chandigarh Carnival 2025 from 14th to 16th November, 2025, out of the available space two equal sites would be carved out for holding business exhibition/activity. The size of each space would range between 320-340 sq. ft. Each site would be given at a flat rate of Rs. 80,000/- + GST."
+            tender_notice_no: null
+            posting_date: null
+            bid_deadline: "10/11/2025 00:00"
+            auction_start_datetime: null
+            auction_end_datetime: null
+            contact_person_address: "4th Floor Paryavaran Bhawan, Sector 19 B, Madhya Marg, Chd."
+            contact_person_email: null
+            website_url: "www.chandigarhtourism.gov.in"
+
+    - filename: "02abd47b-d0f6-40f6-8b06-b1b05efc5bb8.jpg"
+      ground_truth:
+        tenders:
+          - procurement_type: "Tender"
+            amount: "2149000"
+            emd: null
+            document_fee: null
+            tender_fee: null
+            authority_name: "Roads and Buildings Department"
+            authority_ownership: "State"
+            authority_state: null
+            location: "Drive - in Road, Vastrapur, Ahmedabad"
+            district: "Ahmedabad"
+            state: null
+            description: "The on-line tenders are invited by Executive Engineer for road works. Tender shall have to be submitting online through E-Tendering for Estimate Cost Rs.21.49 Lakh and Rs.44.51 Lakh for 02 (two) road works. More details of work & tender can be available on Information Department web site."
+            tender_notice_no: "29 of 2025-26"
+            posting_date: "28/10/2025"
+            bid_deadline: "12/11/2025"
+            auction_start_datetime: null
+            auction_end_datetime: null
+            contact_person_address: null
+            contact_person_email: null
+            website_url: "https://tender.nprocure.com"
+
+    - filename: "02be4359-176f-4712-81e4-a9e3fc5b0b24.jpg"
+      ground_truth:
+        tenders:
+          - procurement_type: "Tender"
+            amount: null
+            emd: null
+            document_fee: null
+            tender_fee: null
+            authority_name: "Jharkhand State Minor Forest Produce Cooperative Development and Marketing Federation Limited"
+            authority_ownership: "State"
+            authority_state: "Jharkhand"
+            location: "Ranchi"
+            district: "Ranchi"
+            state: "Jharkhand"
+            description: "Expression of interest is invited from related institutions for the implementation of the following schemes received by the Jharkhand State Minor Forest Produce Cooperative Development and Marketing Federation Ltd. (Jhamcofed) under the grant scheme for infrastructure development of the federation in the financial year 2024-25 and 2025-26. Solar Agro- MFP Processing unit, Sustainable Harvesting of MFP By Modern Tools and Technique, Portable oil Processing unit, Modernization of Primary Procurement Centres, Amsi/ Amchur Primary Processing Unit, MFP Collector/Farmer's Livelihood Training, and Bamboo Processing Unit in Santhalpargana. Processing units will be made available under the grant to the related institutions. Applications for expression of interest are invited in the prescribed format from the related institutions by 05:00 AM on 07/11/2025 (Friday). The application can be submitted by hand or through post at the Jhamcofed office by the specified date. Prescribed forms, rules and conditions are also available on the notice board of Jhamcofed office and website."
+            tender_notice_no: null
+            posting_date: null
+            bid_deadline: "07/11/2025 05:00"
+            auction_start_datetime: null
+            auction_end_datetime: null
+            contact_person_address: null
+            contact_person_email: "mdjhamfcofed@gmail.com"
+            website_url: "www.jhamfcofed.com"
+
+    - filename: "0a3214d0-8f38-460d-aa12-062b2388d456.jpg"
+      ground_truth:
+        tenders:
+          - procurement_type: "Tender"
+            amount: null
+            emd: null
+            document_fee: null
+            tender_fee: null
+            authority_name: "National Law University, Jodhpur"
+            authority_ownership: null
+            authority_state: "Rajasthan"
+            location: null
+            district: "Jodhpur"
+            state: "Rajasthan"
+            description: "Sealed Bids are invited from various registered firms for: (1) Renovation of toilet at Sarojini Naidu Hall at NLUJ, (2) Construction of canopy (P/F Pre stressed tensile fabric structure), (3) SITC of air conditioner with electrical wiring at class rooms and other buildings, (4) Supply & installation of class room furniture (Desk& chair) at NLUJ. Interested registered firms can quote their rates on or before 17/11/2025 upto 2.00PM. Technical Bids will be opened in the presence of representatives of bidders on 17/11/2025 at 2.30 PM. For comprehensive details, visit on website (https://nlujodhpur.ac.in/university/tender) or contact office (0291-2577530) on working days during office hours."
+            tender_notice_no: "NLU/JODH/P.C./2025/"
+            posting_date: null
+            bid_deadline: "17/11/2025"
+            auction_start_datetime: null
+            auction_end_datetime: null
+            contact_person_address: null
+            contact_person_email: "nul-jod-rj@nic.in"
+            website_url: "www.nlujodhpur.ac.in"

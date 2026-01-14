@@ -1,0 +1,13 @@
+pydantic
+PyYAML
+openai
+google-generativeai
+pytest
+google-genai
+streamlit
+watchdog
+numpy
+scikit-learn
+sentence-transformers
+python-dateutil
+pandas
